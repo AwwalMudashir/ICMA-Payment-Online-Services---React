@@ -10,7 +10,9 @@ function Card({
   iconSizeClass = "h-10 w-10",
   hoverClass = "hover:bg-gray-400",
   hoverIconBgClass = "group-hover:bg-white",
-  hoverLinkTextClass = "group-hover:text-white"
+  hoverLinkTextClass = "group-hover:text-white",
+  onLinkClick,
+  linkHref = "#"
 }) {
   return (
     <div
@@ -23,7 +25,19 @@ function Card({
       </div>
       <h1 className="text-xl font-semibold mt-4">{title}</h1>
       <p>{description}</p>
-      <a href="#" className={`${iconColorClass} ${hoverLinkTextClass}`}>{linkText} ➔</a>
+      {onLinkClick ? (
+        <button
+          type="button"
+          onClick={onLinkClick}
+          className={`${iconColorClass} ${hoverLinkTextClass} font-medium cursor-pointer`}
+        >
+          {linkText} ➔
+        </button>
+      ) : (
+        <a href={linkHref} className={`${iconColorClass} ${hoverLinkTextClass} cursor-pointer `}>
+          {linkText} ➔
+        </a>
+      )}
     </div>
   );
 }

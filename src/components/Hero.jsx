@@ -1,15 +1,37 @@
+import { useState } from "react";
 import Card from "./Card";
 import ContactCard from "./ContactCard";
 import { PhoneIcon, EnvelopeIcon, ClockIcon } from "@heroicons/react/24/outline";
+import PayerIdModal from "./modals/PayerIdModal";
+import AssessmentModal from "./modals/AssessmentModal";
+import InstructionsModal from "./modals/InstructionsModal";
+import ReceiptDetailsModal from "./modals/ReceiptDetailsModal";
+import CheckStatusModal from "./modals/CheckStatusModal";
 
 function Hero() {
+  const [activeModal, setActiveModal] = useState(null);
+
+  const openModal = (modalName) => setActiveModal(modalName);
+  const closeModal = () => setActiveModal(null);
+
+  const handleContinueWithStin = () => setActiveModal("payerIdSupply");
+  const handleContinueWithoutStin = () => setActiveModal("receiptForm");
+
+  const payerModalTitle = activeModal === "payerIdSupply" ? "Supply S-TIN" : undefined;
+
   return ( 
-    <section className="bg-gray-50 px-18 ">
-      <h1 className="text-3xl text-blue-900 text-center font-bold pt-4 mb-6">Revenue Payments Made Easy</h1>
+    <section className="bg-gray-50 px-6 sm:px-10 lg:px-20 pt-28 pb-16">
+      <div className="max-w-4xl mx-auto text-center">
+        <h1 className="text-3xl text-blue-900 font-bold leading-tight mt-6 sm:mt-8 lg:-mt-4 xl:-mt-6">
+          Revenue Payments Made Easy
+        </h1>
+      </div>
 
-      <marquee behavior="" direction="" className="text-green-500 mb-3 text-sm" scrollamount="8">PAY YOUR TAXES, RATES, FEES, AND LEVIES</marquee>
+      <marquee behavior="" direction="" className="text-green-500 mt-6 mb-6 text-sm" scrollamount="8">
+        PAY YOUR TAXES, RATES, FEES, AND LEVIES
+      </marquee>
 
-      <div className="grid grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
         <Card
           title="PAYER ID"
           description="(PAYE, WHT, and Back Duty Only)"
@@ -18,6 +40,7 @@ function Hero() {
           iconColorClass="text-orange-600"
           iconSizeClass="h-10 w-10"
           hoverClass="hover:bg-orange-400"
+          onLinkClick={() => openModal("payerId")}
 
         />
 
@@ -29,6 +52,7 @@ function Hero() {
           iconColorClass="text-blue-700"
           iconSizeClass="h-10 w-10"
           hoverClass="hover:bg-blue-400"
+          onLinkClick={() => openModal("assessment")}
         />
 
         <Card
@@ -39,23 +63,26 @@ function Hero() {
           iconColorClass="text-green-700"
           iconSizeClass="h-10 w-10"
           hoverClass="hover:bg-green-400"
+          onLinkClick={() => openModal("instructions")}
         />
       </div>
 
       {/* Check Pay ment status */}
       <div className="flex justify-center">
-        <a 
-          href="#" className=" bg-green-700 rounded-lg p-3 mt-12 text-white font-medium "
+        <button 
+          type="button"
+          onClick={() => openModal("checkStatus")}
+          className=" bg-green-700 rounded-lg px-6 py-3 mt-12 text-white font-medium hover:bg-green-600 transition-colors"
         >
           Check Payment Status
-        </a>
+        </button>
       </div>
 
 
       {/* Contact us */}
-      <div className="pb-16">
+      <div className="pb-4">
         <h1 className="text-3xl text-blue-900 text-center font-bold mt-12 mb-6">Contact Us</h1>
-        <div className="grid grid-cols-3 gap-8 ">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
           <ContactCard 
           icon={PhoneIcon}
           title="Call Us"
@@ -75,6 +102,29 @@ function Hero() {
         />
         </div>
       </div>
+      <PayerIdModal
+        isOpen={activeModal === "payerId" || activeModal === "payerIdSupply"}
+        onClose={closeModal}
+        title={payerModalTitle}
+      />
+      <AssessmentModal
+        isOpen={activeModal === "assessment"}
+        onClose={closeModal}
+      />
+      <InstructionsModal
+        isOpen={activeModal === "instructions"}
+        onClose={closeModal}
+        onContinueWithStin={handleContinueWithStin}
+        onContinueWithoutStin={handleContinueWithoutStin}
+      />
+      <ReceiptDetailsModal
+        isOpen={activeModal === "receiptForm"}
+        onClose={closeModal}
+      />
+      <CheckStatusModal
+        isOpen={activeModal === "checkStatus"}
+        onClose={closeModal}
+      />
     </section>
    );
 }
