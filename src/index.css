@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+#root{
+  width: 90%;
+  margin: auto;
+}
+
+body{
+  padding: 20px; 
+}
